@@ -1,2 +1,0 @@
-import OAI.NumberTheory.PiExponent.Approximation.SectionPullback
-import OAI.NumberTheory.PiExponent.Approximation.TensorOpenBaseChange

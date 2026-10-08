@@ -1,86 +1,105 @@
 /- Verification harness for the `LogExponent` port. Each `#guard_msgs` block fails
 elaboration unless `#print axioms` reports exactly Lean's three standard axioms. -/
-import OAI.NumberTheory.LogExponent.Approximation.InterpolationConsequence
-import OAI.NumberTheory.LogExponent.Main
+import LogIrrationalityMeasure.Approximation.InterpolationConsequence
+import LogIrrationalityMeasure.Main
+import LogIrrationalityMeasure
 
-/-- info: 'OAI.LogExponent.log_irrationalityExponent_of_globalInterpolation' depends on axioms: [propext,
+/-- info: 'LogIrrationalityMeasure.LogExponent.log_irrationalityExponent_of_globalInterpolation' depends on axioms: [propext,
  Classical.choice,
  Quot.sound] -/
 #guard_msgs in
-#print axioms OAI.LogExponent.log_irrationalityExponent_of_globalInterpolation
+#print axioms LogIrrationalityMeasure.LogExponent.log_irrationalityExponent_of_globalInterpolation
 
-/-- info: 'OAI.LogExponent.logEventualLowerBound_of_globalInterpolation' depends on axioms: [propext,
+/-- info: 'LogIrrationalityMeasure.LogExponent.logEventualLowerBound_of_globalInterpolation' depends on axioms: [propext,
  Classical.choice,
  Quot.sound] -/
 #guard_msgs in
-#print axioms OAI.LogExponent.logEventualLowerBound_of_globalInterpolation
+#print axioms LogIrrationalityMeasure.LogExponent.logEventualLowerBound_of_globalInterpolation
 
-/-- info: 'OAI.LogExponent.log_integerEventualLowerBound_of_globalInterpolation' depends on axioms: [propext,
+/-- info: 'LogIrrationalityMeasure.LogExponent.log_integerEventualLowerBound_of_globalInterpolation' depends on axioms: [propext,
  Classical.choice,
  Quot.sound] -/
 #guard_msgs in
-#print axioms OAI.LogExponent.log_integerEventualLowerBound_of_globalInterpolation
+#print axioms LogIrrationalityMeasure.LogExponent.log_integerEventualLowerBound_of_globalInterpolation
 
-/-- info: 'OAI.LogExponent.log_two_irrationalityExponent_of_globalInterpolation' depends on axioms: [propext,
+/-- info: 'LogIrrationalityMeasure.LogExponent.log_two_irrationalityExponent_of_globalInterpolation' depends on axioms: [propext,
  Classical.choice,
  Quot.sound] -/
 #guard_msgs in
-#print axioms OAI.LogExponent.log_two_irrationalityExponent_of_globalInterpolation
+#print axioms LogIrrationalityMeasure.LogExponent.log_two_irrationalityExponent_of_globalInterpolation
 
-/-- info: 'OAI.LogExponent.DeterminantContradiction.logEventualLowerBound_of_interpolation_and_analytic_aggregate' depends on axioms: [propext,
+/-- info: 'LogIrrationalityMeasure.LogExponent.DeterminantContradiction.logEventualLowerBound_of_interpolation_and_analytic_aggregate' depends on axioms: [propext,
  Classical.choice,
  Quot.sound] -/
 #guard_msgs in
-#print axioms OAI.LogExponent.DeterminantContradiction.logEventualLowerBound_of_interpolation_and_analytic_aggregate
+#print axioms LogIrrationalityMeasure.LogExponent.DeterminantContradiction.logEventualLowerBound_of_interpolation_and_analytic_aggregate
 
-/-- info: 'OAI.LogExponent.LiteralAnalytic.analyticAggregate' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'LogIrrationalityMeasure.LogExponent.LiteralAnalytic.analyticAggregate' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in
-#print axioms OAI.LogExponent.LiteralAnalytic.analyticAggregate
+#print axioms LogIrrationalityMeasure.LogExponent.LiteralAnalytic.analyticAggregate
 
-/-- info: 'OAI.LogExponent.MatrixArithmetic.selectedMinor_arithmetic_lower_bound' depends on axioms: [propext,
+/-- info: 'LogIrrationalityMeasure.LogExponent.MatrixArithmetic.selectedMinor_arithmetic_lower_bound' depends on axioms: [propext,
  Classical.choice,
  Quot.sound] -/
 #guard_msgs in
-#print axioms OAI.LogExponent.MatrixArithmetic.selectedMinor_arithmetic_lower_bound
+#print axioms LogIrrationalityMeasure.LogExponent.MatrixArithmetic.selectedMinor_arithmetic_lower_bound
 
-/-- info: 'OAI.LogExponent.MatrixTranslation.det_matrix_translation' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'LogIrrationalityMeasure.LogExponent.MatrixTranslation.det_matrix_translation' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in
-#print axioms OAI.LogExponent.MatrixTranslation.det_matrix_translation
+#print axioms LogIrrationalityMeasure.LogExponent.MatrixTranslation.det_matrix_translation
 
-/-- info: 'OAI.LogExponent.formal_period_collision_bound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'LogIrrationalityMeasure.LogExponent.formal_period_collision_bound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in
-#print axioms OAI.LogExponent.formal_period_collision_bound
+#print axioms LogIrrationalityMeasure.LogExponent.formal_period_collision_bound
 
-/-- info: 'OAI.LogExponent.exists_admissible_parameters' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'LogIrrationalityMeasure.LogExponent.exists_admissible_parameters' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in
-#print axioms OAI.LogExponent.exists_admissible_parameters
+#print axioms LogIrrationalityMeasure.LogExponent.exists_admissible_parameters
 
-/-- info: 'OAI.LogExponent.irrational_of_eventualLowerBound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'LogIrrationalityMeasure.LogExponent.irrational_of_eventualLowerBound' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in
-#print axioms OAI.LogExponent.irrational_of_eventualLowerBound
+#print axioms LogIrrationalityMeasure.LogExponent.irrational_of_eventualLowerBound
 
-/-- info: 'OAI.LogExponent.exp_logarithmicPeriod' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'LogIrrationalityMeasure.LogExponent.exp_logarithmicPeriod' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in
-#print axioms OAI.LogExponent.exp_logarithmicPeriod
+#print axioms LogIrrationalityMeasure.LogExponent.exp_logarithmicPeriod
 
 /-! ## Unconditional theorems (stage 2: the interpolation hypothesis discharged) -/
 
-/-- info: 'OAI.LogExponent.globalInterpolation' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'LogIrrationalityMeasure.LogExponent.globalInterpolation' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in
-#print axioms OAI.LogExponent.globalInterpolation
+#print axioms LogIrrationalityMeasure.LogExponent.globalInterpolation
 
-/-- info: 'OAI.LogExponent.log_irrationalityExponent' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'LogIrrationalityMeasure.LogExponent.log_irrationalityExponent' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in
-#print axioms OAI.LogExponent.log_irrationalityExponent
+#print axioms LogIrrationalityMeasure.LogExponent.log_irrationalityExponent
 
-/-- info: 'OAI.LogExponent.log_two_irrationalityExponent' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'LogIrrationalityMeasure.LogExponent.log_two_irrationalityExponent' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in
-#print axioms OAI.LogExponent.log_two_irrationalityExponent
+#print axioms LogIrrationalityMeasure.LogExponent.log_two_irrationalityExponent
 
-/-- info: 'OAI.LogExponent.log_main' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'LogIrrationalityMeasure.LogExponent.log_main' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in
-#print axioms OAI.LogExponent.log_main
+#print axioms LogIrrationalityMeasure.LogExponent.log_main
 
-/-- info: 'OAI.LogExponent.log_not_liouvilleWith' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+/-- info: 'LogIrrationalityMeasure.LogExponent.log_not_liouvilleWith' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in
-#print axioms OAI.LogExponent.log_not_liouvilleWith
+#print axioms LogIrrationalityMeasure.LogExponent.log_not_liouvilleWith
+
+/-! ## Main theorems of the repository (`LogIrrationalityMeasure.lean`) -/
+
+/-- info: 'LogIrrationalityMeasure.irrationality_measure_log' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms LogIrrationalityMeasure.irrationality_measure_log
+
+/-- info: 'LogIrrationalityMeasure.irrationalityExponent_log' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms LogIrrationalityMeasure.irrationalityExponent_log
+
+/-- info: 'LogIrrationalityMeasure.irrationality_measure_log_two' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms LogIrrationalityMeasure.irrationality_measure_log_two
+
+/-- info: 'LogIrrationalityMeasure.log_not_liouvilleWith' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms LogIrrationalityMeasure.log_not_liouvilleWith

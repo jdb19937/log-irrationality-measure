@@ -1,13 +1,14 @@
-name = "log2exponent"
+name = "log-irrationality-measure"
 version = "0.1.0"
-defaultTargets = ["OAI"]
+defaultTargets = ["LogIrrationalityMeasure"]
 
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
 rev = "d13f23b723b8a846827a245b89c10fc7d3f11612"
 
+# Root module LogIrrationalityMeasure.lean states the main theorems; LogIrrationalityMeasure/ holds the proof.
 [[lean_lib]]
-name = "OAI"
-roots = ["OAI"]
-globs = ["OAI.NumberTheory.PiExponent.+", "OAI.NumberTheory.LogExponent.+"]
+name = "LogIrrationalityMeasure"
+roots = ["LogIrrationalityMeasure"]
+globs = ["LogIrrationalityMeasure", "LogIrrationalityMeasure.+"]
