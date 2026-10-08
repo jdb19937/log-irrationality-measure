@@ -1,0 +1,265 @@
+\documentclass[11pt]{amsart}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{newtxtext,newtxmath}
+\usepackage{microtype}
+\usepackage{listings}
+\usepackage{upquote}
+\lstdefinelanguage{Lean}{morekeywords={theorem,def,open},sensitive=true,morecomment=[l]{--}}
+\lstset{language=Lean, basicstyle=\small\fontfamily{lmtt}\selectfont\upshape, keywordstyle=\bfseries,
+  columns=fullflexible, keepspaces=true, breaklines=false, xleftmargin=1em, aboveskip=6pt, belowskip=6pt,
+  literate={α}{{$\alpha$}}1 {ℚ}{{$\mathbb{Q}$}}1 {ℝ}{{$\mathbb{R}$}}1 {→}{{$\rightarrow$}}1 {≠}{{$\ne$}}1 {∀}{{$\forall$}}1 {≤}{{$\le$}}1 {¬}{{$\lnot$}}1}
+\usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
+\newcommand{\doi}[1]{\href{https://doi.org/#1}{doi:#1}}
+
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{proposition}[lemma]{Proposition}
+\newtheorem{theorem}[lemma]{Theorem}
+\newtheorem{corollary}[lemma]{Corollary}
+\newtheorem{remark}[lemma]{Remark}
+\newtheorem*{theoremA}{Theorem A}
+
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\degW}{\deg_W}
+
+\begin{document}
+
+\title[Logarithms of rational numbers have irrationality measure $2$]{The irrationality measure of the logarithm\\ of a rational number is $2$}
+
+\author{Dan Brown$^*$}
+\email{jdb1729@gmail.com}
+\thanks{$^*$Author of \emph{The Da Vinci Code}.}
+
+\date{October 7, 2026}
+
+\begin{abstract}
+For every positive rational $\alpha\ne1$ the irrationality measure of $\log\alpha$ equals $2$: for every $\nu>2$, $|\log\alpha-p/q|\ge q^{-\nu}$ for all integers $p,q$ with $q$ sufficiently large. In particular $\mu(\log2)=2$, where the previous record was $3.5746$. The proof is the interpolation-determinant argument that gives $\mu(\pi)=2$, with the $K$ interpolation centres moved from $(1,2\pi i j)$ to $(\alpha^j,\,j\log\alpha)$ on the exponential curve $z\mapsto(e^z,z)$. The single new ingredient is a version of the separated-weight interpolation theorem with centres in distinct fibres of the exponential coordinate; the arithmetic lower bound pays the height of $\alpha^j$ in an error term that the existing parameter choice already drives to zero. For real algebraic $\alpha$ of degree $D$ the same argument gives $\mu(\log\alpha)\le2D$, and we explain why ratios of logarithms are not reached. The proof is formalized in Lean~4 over Mathlib, by modifying the formalization of the $\pi$ theorem module by module.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+For a real number $\omega$ the irrationality measure $\mu(\omega)$ is the supremum of the $\nu$ for which $|\omega-p/q|<q^{-\nu}$ has infinitely many rational solutions. Dirichlet gives $\mu\ge2$ for irrational $\omega$, and $\mu=2$ for almost every real number. For logarithms of rational numbers the known bounds come from Pad\'e-type constructions: $\mu(\log2)\le3.5746$ (Marcovecchio \cite{Mar}, improving Rukhadze \cite{Ruk} and Hata \cite{Hata}), and effective bounds of Baker type $\mu(\log\alpha)<\infty$ for every algebraic $\alpha\ne0,1$ \cite{Bak}.
+
+The paper \cite{OAI} proves $\mu(\pi)=2$ by a Roth-type argument on the exponential curve: an interpolation determinant whose rows are jets at $K$ centres $(1,j\omega)$, $\omega=2\pi i$, of polynomials restricted to the curve $z\mapsto(e^z,z+u)$, whose columns are weighted monomials, whose arithmetic size is bounded below because the centres are Gaussian integer points after clearing the denominators $q_i$ of the approximations, and whose analytic size is bounded above because rows at different centres test the same entire functions and collide. The theorem is machine-verified in Lean~4 over Mathlib, and so is Theorem~A below (Section~\ref{sec:formal}). We cite \cite{OAI} by its section, equation and result numbers throughout.
+
+\begin{theoremA}
+Let $\alpha$ be a positive rational number, $\alpha\ne1$, and $\omega=\log\alpha$. For every real $\nu>2$ there is $Q(\nu,\alpha)$ such that
+\[
+\Bigl|\omega-\frac pq\Bigr|\ \ge\ q^{-\nu}\qquad\text{for all integers $p$, $q$ with $q\ge Q(\nu,\alpha)$.}
+\]
+Hence $\mu(\log\alpha)=2$; in particular $\mu(\log2)=2$.
+\end{theoremA}
+
+The argument of \cite{OAI} uses one property of $\pi$: $e^{2\pi ij}=1$, which places the centre $(1,j\omega)$ on the curve at $z=j\omega$ (Lemma~3.2 there). For $\omega=\log\alpha$ the analogous fact is $e^{j\omega}=\alpha^j$, which places the centre $(\alpha^j,j\omega)$ on the curve. The centres therefore lie in distinct fibres of the exponential coordinate $Y$, and the interpolation theorem of \cite{OAI}, stated for centres with $Y=1$, must be restated for centres $(y_j,c_j)$ with distinct $y_j$. Section~\ref{sec:interp} does this; the proof is that of \cite{OAI}, Section~2, with three local changes which we display. Section~\ref{sec:det} carries the $Y$-height of $\alpha^j$ through the determinant estimates: it costs $(K-1)\log b/w_0$ in the arithmetic lower bound ($\alpha=a/b$) and replaces the radius $100K$ by $100K(1+|\log\alpha|)$ in the collision estimate, both of the form $O_\alpha(K/w_0)$, which the parameter choice of \cite{OAI}, Section~4, sends to zero. For $\alpha=2$ the arithmetic lower bound is literally Lemma~3.1 of \cite{OAI}. Section~\ref{sec:limits} records what the method gives for algebraic $\alpha$ and why it gives nothing for $\log3/\log2$.
+
+\subsection*{Notation}
+Coordinates $Y,X_1,\dots,X_m$; a positive rational weight vector $W=(w_0,\dots,w_m)$ gives the $W$-degree $w_0h+\sum w_i\alpha_i$ of $Y^hX^\alpha$, and $P_W(H)$ is the space of polynomials of $W$-degree at most $H$. For $V=(v_0,\dots,v_m)$, $J_V(H)$ is the quotient of $\C[[t,u_1,\dots,u_m]]$ by the series all of whose monomials have $V$-weight at least $H$. We write $w\beta=\sum_iw_i\beta_i$, $w_*=\min_iw_i$, $\Lambda=4\log2$, and all logarithms are natural.
+
+\section{Interpolation with centres in distinct fibres}\label{sec:interp}
+
+\begin{theorem}[Separated-weight interpolation, general fibres]\label{interp}
+Fix integers $m,K\ge1$ and positive rationals $w_0,v_0,\theta$ with $0<\theta<1$,
+\begin{equation}\label{2.1}
+K\theta^m<1,\qquad K\frac{w_0}{v_0}\theta^m<1.
+\end{equation}
+There are successive lower thresholds for positive rationals $w_1,\dots,w_m$, each depending only on these data and the previously chosen weights, with the following property. Put $W=(w_0,\dots,w_m)$, $V=(v_0,w_1/\theta,\dots,w_m/\theta)$. For any points
+\[
+a_j=(y_j,c_{j1},\dots,c_{jm})\in\C^\times\times\C^m,\qquad0\le j<K,
+\]
+such that whenever $y_j=y_{j'}$ with $j\ne j'$ the coordinates $c_{ji},c_{j'i}$ differ for every $i$, the map
+\begin{equation}\label{2.2}
+P_W(H)\longrightarrow\bigoplus_{j=0}^{K-1}J_V(H),\qquad P\longmapsto\Bigl(P\bigl(y_j(1+t),\,(c_{ji}+u_i+\log(1+t))_{i=1}^m\bigr)\Bigr)_{j=0}^{K-1},
+\end{equation}
+is surjective for all sufficiently large, sufficiently divisible $H$. The divisibility can be chosen using only the weights; the remaining threshold for $H$ may depend on the points.
+\end{theorem}
+
+For $y_j=1$ this is Theorem~2.1 of \cite{OAI}. When the $y_j$ are pairwise distinct the condition on the $c_{ji}$ is empty.
+
+\begin{proof}
+We follow \cite{OAI}, Section~2, and indicate the changes. The weights are chosen as in (2.7)--(2.9) there: $\sigma>0$ small with $(1+3\sigma)^{m+1}K(w_0/v_0)\theta^m<1$, $(1+3\sigma)^mK\theta^m<1$, $(1+\sigma)\theta<1$; $v_i=w_i/\theta$; $L_0=m+2$; $C_*$ as in (2.8); and $w_1,\dots,w_m$ successively so large that $\prod_{a\in A}w_a>C_*\prod_{b\in B}v_b$ for all index sets $A,B$ of equal size whose largest differing index lies in $A$. This involves no point.
+
+Let $C$ be an irreducible curve with generic point in the affine chart, with smooth projective model, $W$-degree
+\[
+\degW C=\sum_P\max\Bigl(0,-\frac{\ord_PY}{w_0},-\frac{\ord_PX_1}{w_1},\dots,-\frac{\ord_PX_m}{w_m}\Bigr)
+\]
+as in (2.10), and, at a branch $P$ through $a_j$,
+\begin{equation}\label{hP}
+h_P=\min\Bigl(\frac{\ord_P(Y-y_j)}{v_0},\ \frac{\ord_P(X_1-c_{j1}-\log(Y/y_j))}{v_1},\ \dots,\ \frac{\ord_P(X_m-c_{jm}-\log(Y/y_j))}{v_m}\Bigr),
+\end{equation}
+where $\log(Y/y_j)$ is its formal expansion at $Y=y_j$, well defined along the branch since $Y-y_j$ has positive order there. This replaces (2.11), where $y_j=1$. In the local coordinate $t=Y/y_j-1$ at $a_j$ the jet \eqref{2.2} is $P(y_j(1+t),c_j+u+\log(1+t))$, so $h_P$ measures, in $V$-weight, the contact of the branch with the jet. The frame $D_0=Y\partial_Y+\sum_i\partial_{X_i}$, $D_i=\partial_{X_i}$ of \cite{OAI} is unchanged. In the coordinates $(t,u)$ at $a_j$, where $Y=y_j(1+t)$ and $X_i=c_{ji}+u_i+\log(1+t)$, the chain rule gives $\partial_t=y_j\partial_Y+(1+t)^{-1}\sum_i\partial_{X_i}$, hence $(1+t)\partial_t=D_0$ and $\partial_{u_i}=D_i$: the action of the frame on jets is the same at every centre, which is all that the order bookkeeping of \cite{OAI} (the display after (2.13), ``each monomial has order at least its weight times $h_P$'') uses.
+
+\emph{Curve inequality.} We claim
+\begin{equation}\label{2.12}
+\degW C\ \ge\ (1+\sigma)\sum_{P\mapsto a_j}h_P ,
+\end{equation}
+the sum over all branches through prescribed points. Suppose it fails. The construction of the auxiliary polynomial $F_N$ (of $W$-degree at most $N$, $V$-order at least $(1+3\sigma)N$ at every centre) is a count of coefficients against jet conditions; the number of jet conditions at $a_j$ is the number of monomials $t^su^\beta$ of $V$-weight below $(1+3\sigma)N$, independent of $y_j$, so the count (2.13) is unchanged. The zero--pole comparison on $C$ (poles of $F_N|_C$ of total degree at most $N\degW C$, zeros of order at least $(1+3\sigma)Nh_P$ at the branches through centres) uses only \eqref{hP} and the order bookkeeping, and gives $F_N|_C=0$ together with the vanishing (2.14) of all frame derivatives of cost at most $\sigma N$ on $C^\circ$. The persistent component $Z\supseteq C^\circ$, the normal-basis inequality (2.15) from Lemma~2.2 there, the weight separation, and the residue argument are statements about $Z$, $F_N$ and the frame, and involve no centre. They give: $Y$ is constant on $Z$.
+
+Here is the first change. In \cite{OAI} one concludes ``$Y=1$ on $C^\circ$'' because $C$ meets a centre with $Y=1$. Now $C^\circ\subseteq Z$ meets some centre $a_{j_0}$ (otherwise there is nothing to prove), so $Y\equiv y_{j_0}$ on $C$. Consequently every centre that $C$ meets lies in the fibre $Y=y_{j_0}$, and the sum in \eqref{2.12} runs over branches through centres of that fibre only.
+
+\emph{The fibre argument.} Work in the affine fibre $Y=y_{j_0}$, in which $h_P=\min_i\ord_P(X_i-c_{ji})/v_i$ for the centres $a_j$ of the fibre (the $Y$-term of \eqref{hP} is $+\infty$ and $\log(Y/y_j)=0$ there). This is the second change: in \cite{OAI} all $K$ centres lie in the fibre, here only those with $y_j=y_{j_0}$, say $K'\le K$ of them. The auxiliary polynomial $G_N(X_1,\dots,X_m)$ of weighted degree at most $N$ with order at least $(1+3\sigma)N$ at these $K'$ centres exists because the ratio of conditions to coefficients tends to $K'(1+3\sigma)^m\theta^m\le K(1+3\sigma)^m\theta^m<1$. The zero--pole comparison, the chain $U_r$, the persistent component $Z'$ of codimension $1\le k\le m-1$ (for $m\ge2$; for $m=1$ the contradiction is immediate), and the unique normal index set are as in \cite{OAI}; they give that some $X_i$ is constant on $Z'$.
+
+Third change: ``coordinatewise distinctness shows $Z'$ meets at most one prescribed point'' is the hypothesis of Theorem~\ref{interp} restricted to the fibre: centres sharing $y_{j_0}$ have distinct $i$-th coordinates. When the $y_j$ are pairwise distinct, $K'=1$, the fibre has a single centre, and this second stage (the polynomial $G_N$, the chain $U_r$, the component $Z'$) is not needed at all. In either case $C$ meets only one centre $a_j$ of the fibre, and with a coordinate $X_l$ nonconstant on $C$,
+\[
+\degW C\ \ge\ \theta^{-1}\sum_{P\mapsto a_j}h_P\ >\ (1+\sigma)\sum_{P\mapsto a_j}h_P
+\]
+by $(1+\sigma)\theta<1$, contradicting the failure of \eqref{2.12}.
+
+\emph{From the curve inequality to jets.} Section~2.3 of \cite{OAI} works on the weighted projective closure with the weighted point ideals $I_j=(t^{R/v_0},(u_i')^{R/v_i})$ at the centres, the blow-up along them, the nefness of $A-(1+\sigma)E$ (from \eqref{2.12} applied to every curve, including curves missing the chart, which are handled there without reference to the centres), ampleness of $A-E$, and Serre vanishing giving $H^1=0$ and surjectivity onto the truncated jets; the final step undoes the truncation by the invertible filtered substitution. The only point-dependent object is the local coordinate $t=Y-1$ at the centre, which becomes $t=Y/y_j-1=(Y-y_j)/y_j$, a regular parameter at $a_j$ since $y_j\ne0$; (2.18)--(2.23) there are verbatim. The thresholds for $w_1,\dots,w_m$ come from (2.7) and (2.9) and involve no point; the threshold for $H$ (through the choice of $N$ and the vanishing) may depend on the points.
+\end{proof}
+
+\section{The determinant}\label{sec:det}
+
+Let $\alpha=a/b$ with coprime positive integers $a\ne b$, $\omega=\log\alpha\ne0$. Let $\nu>2$ and suppose integers $p_i$, $q_i\ge2$ satisfy
+\begin{equation}\label{3.1}
+\Bigl|\omega-\frac{p_i}{q_i}\Bigr|\le q_i^{-\nu},\qquad w_i=\lceil\log q_i\rceil,\qquad r_i=\frac{p_i}{q_i}\qquad(1\le i\le m),
+\end{equation}
+with $m,K,w_0,v_0,\theta,w_1,\dots,w_m$ admissible for Theorem~\ref{interp}. Since $\omega\ne0$, $p_i\ne0$ once $q_i$ is large. Fix $F_0>2/\theta$, $T_i=F_0w_i/v_0$, and the truncated logarithms $G_i(t)=\sum_{1\le k<T_i}(-1)^{k+1}t^k/k$ of (3.2) in \cite{OAI}; replacing $\log(1+t)$ by $G_i$ is an invertible filtration-preserving substitution, so Theorem~\ref{interp} remains surjective with the $G_i$ (Section~3 of \cite{OAI}).
+
+Columns are the monomials $Y^hX^\alpha$ with $w_0h+w\alpha\le H$; rows are the triples $\rho=(j,s,\beta)$ with $0\le j<K$, $v_0s+w\beta/\theta<H$; the entry is the coefficient of $t^su^\beta$ in
+\begin{equation}\label{3.3}
+P\bigl(\alpha^j(1+t),\ jr_1+G_1(t)+u_1,\ \dots,\ jr_m+G_m(t)+u_m\bigr).
+\end{equation}
+By Theorem~\ref{interp} with centres $(\alpha^j,jr_1,\dots,jr_m)$, whose $Y$-coordinates $\alpha^j$ are pairwise distinct because $\alpha>0$, $\alpha\ne1$, for all large divisible $H$ there is a nonzero square minor $\Delta_H$ using every row. Its size $M=M_H$ satisfies (3.5) of \cite{OAI}, $M\sim K\theta^mH^{m+1}/((m+1)!\,v_0\prod_iw_i)$, and $\bar b=\bar b_H=(MH)^{-1}\sum_\rho w\beta\in[0,\theta]$.
+
+\begin{lemma}[Arithmetic lower bound]\label{arith}
+With $E_{\mathrm{ar}}=\Lambda F_0m/v_0+\Lambda\sum_i1/w_i+\theta/w_*$ as in (3.6) of \cite{OAI} and
+\[
+E'_{\mathrm{ar}}=E_{\mathrm{ar}}+\frac{(K-1)\log b}{w_0},
+\]
+every minor chosen as above satisfies $\log|\Delta_H|/(MH)\ge-(1-\bar b)-E'_{\mathrm{ar}}$.
+\end{lemma}
+
+\begin{proof}
+For $P=Y^hX^\alpha$ the entry of row $(j,s,\beta)$ equals
+\[
+\alpha^{jh}\prod_i\binom{\alpha_i}{\beta_i}\,[t^s]\,(1+t)^h\prod_i\bigl(jr_i+G_i(t)\bigr)^{\alpha_i-\beta_i}
+\]
+when $\alpha\ge\beta$ and $0$ otherwise. Scale column $Y^hX^\alpha$ by $\prod_iq_i^{\alpha_i}$, row $(j,s,\beta)$ by $\prod_iq_i^{-\beta_i}$, and multiply by $D_H=\prod_i\operatorname{lcm}(1,\dots,T_i-1)^{\lfloor H/w_i\rfloor}$, which clears the denominators of the $G_i$ (proof of Lemma~3.1 in \cite{OAI}); since $q_ijr_i=jp_i\in\Z$, all factors except $\alpha^{jh}$ are then integers. Put $h_{\max}=\lfloor H/w_0\rfloor$ and scale row $(j,s,\beta)$ additionally by $b^{jh_{\max}}$, turning $\alpha^{jh}$ into $a^{jh}b^{j(h_{\max}-h)}\in\Z$. The scaled matrix is over $\Z$ with nonzero determinant, so its determinant has modulus at least $1$. The row scalings by $b^{jh_{\max}}$ contribute at most $\sum_\rho jh_{\max}\log b\le M(K-1)(H/w_0)\log b$ to the logarithm; the remaining scalings are accounted for exactly as in (3.8) of \cite{OAI}: $\sum_{\text{cols}}\sum_i\alpha_i\log q_i\le MH$, $\sum_{\text{rows}}\sum_i\beta_i\log q_i\ge MH\bar b-MH\theta/w_*$, and $\log D_H\le MH(\Lambda F_0m/v_0+\Lambda\sum_i1/w_i)$.
+\end{proof}
+
+For $\alpha=2$ one has $b=1$ and Lemma~\ref{arith} is Lemma~3.1 of \cite{OAI} with $\Z$ in place of $\Z[i]$.
+
+\begin{lemma}[Exact row translation]\label{transl}
+Put $z=j\omega+\log(1+t)$. Then $e^z=\alpha^j(1+t)=Y$ and $X_i=z+u_i+\eps_i+\tau_i(t)$ with $\eps_i=j(r_i-\omega)$, $\tau_i=G_i-\log(1+t)$. Every row of \eqref{3.3} is a sum of at most $Q_H=(\lfloor H\rfloor+1)^{2m}(\lfloor H/v_0\rfloor+1)$ scalar multiples of the test rows $\bigl([t^\ell]f_{a,P}(j\omega+\log(1+t))\bigr)_P$, $a\ge\beta$, $wa\le H$, $0\le\ell\le s$, where
+\[
+f_{a,P}(z)=[u^a]\,P(e^z,z+u_1,\dots,z+u_m)
+\]
+is an entire function of $z$ independent of $j$, and a scalar with index $a$ satisfies $|\xi|\le\exp\{-\nu w(a-\beta)+HE_{\mathrm{tr}}\}$ with $E_{\mathrm{tr}}=\nu/F_0+\log2/v_0+(\log4+\log(2K)+\nu)/w_*$ as in (3.12) of \cite{OAI}.
+\end{lemma}
+
+\begin{proof}
+The identity $e^{j\omega}=\alpha^j$ gives $e^z=Y$; the rest is the substitution of Lemma~3.2 in \cite{OAI}, and the identity (3.13) and its bounds are verbatim, with $|\eps_i|\le(K-1)q_i^{-\nu}$, which is smaller than the bound $2Ke^\nu e^{-\nu w_i}$ used there.
+\end{proof}
+
+\begin{lemma}[Collision estimate]\label{coll}
+Put $R_\alpha=100K(1+|\log\alpha|)$, $c=(\log2)/4$ and
+\[
+E'_{\mathrm{hol}}=\frac{R_\alpha}{w_0}+\frac{\log2}{v_0}+\frac{\log(2R_\alpha)}{w_*}.
+\]
+Choose one translated test row from each row expansion of Lemma~\ref{transl}, remove the scalars, and let $T$ be the resulting matrix and $n_a$ the number of rows with transverse index $a$. Then $|\det T|\le\exp\{-c\sum_an_a^2+MH(E'_{\mathrm{hol}}+\rho_H)\}$ with $\rho_H\to0$ independent of the choices.
+\end{lemma}
+
+\begin{proof}
+On $|z|\le R_\alpha$ one has $|f_{a,P}(z)|\le\exp\{H(R_\alpha/w_0+\log(2R_\alpha)/w_*)\}$ by (3.10) of \cite{OAI}, since $h\le H/w_0$ and $|\alpha|\le H/w_*$. On $|t|=1/2$, $|j\omega+\log(1+t)|\le(K-1)|\log\alpha|+\log2\le R_\alpha/2$. The expansion of each $f_{a,P}$ in powers of $z/R_\alpha$, the vanishing of determinant terms with a repeated pair $(a,d)$, the bound $\sum_\rho d_\rho\ge\sum_a\binom{n_a}{2}$, and the geometric decay are those of Lemma~3.3 in \cite{OAI} with $R$ replaced by $R_\alpha$.
+\end{proof}
+
+\begin{proposition}[Comparison]\label{comp}
+Let $0<\eta<1$, $A\in(0,1)$, $L=\eta^2K\theta^m/((m+1)v_0A^m)$, $E'_{\mathrm{an}}=E_{\mathrm{tr}}+E'_{\mathrm{hol}}$, and
+\[
+g=\nu\bigl(A(1-\eta)-\theta\bigr)-(1-\theta).
+\]
+If $g>0$, $E'_{\mathrm{ar}}+E'_{\mathrm{an}}<g$ and $cL>1+E'_{\mathrm{ar}}+E'_{\mathrm{an}}$, then for all sufficiently large divisible $H$ the bounds of Lemma~\ref{arith} and Lemmas~\ref{transl}--\ref{coll} are incompatible.
+\end{proposition}
+
+\begin{proof}
+Proposition~3.4 of \cite{OAI}, whose proof uses only the three lemmas, the simplex count $D_A(H)\sim(AH)^m/(m!\prod w_i)$ of rows with $wa\le AH$, and $\bar b\le\theta$: either at least $\eta M$ rows have $wa\le AH$, and Cauchy--Schwarz gives $\sum_an_a^2\ge MH(L-o(1))$, so Lemma~\ref{coll} beats Lemma~\ref{arith} when $cL>1+E'_{\mathrm{ar}}+E'_{\mathrm{an}}$; or more than $(1-\eta)M$ rows have $wa>AH$, and the scalars of Lemma~\ref{transl} supply $\exp\{-\nu(A(1-\eta)-\bar b)MH\}$, which beats Lemma~\ref{arith} when $\nu(A(1-\eta)-\bar b)-(1-\bar b)\ge g>E'_{\mathrm{ar}}+E'_{\mathrm{an}}$, the minimum over $\bar b\in[0,\theta]$ being at $\bar b=\theta$ since $\nu>1$.
+\end{proof}
+
+\section{Proof of Theorem A}\label{sec:proof}
+
+\begin{lemma}[Parameters; Lemma 4.1 of \cite{OAI}]\label{params}
+Let $\nu>2$. There are rationals $0<\theta<A<B<1$ and $C>1$ with
+\[
+\nu(A-\theta)>1-\theta,\qquad A^2<\theta,\qquad B<1/C,\qquad B<C\theta .
+\]
+\end{lemma}
+\begin{proof}
+Take $b\in(1/2,1-1/\nu)$, $\theta=1-\delta$, $A=1-b\delta$ with $\delta$ small: then $\nu(A-\theta)-(1-\theta)=(\nu(1-b)-1)\delta>0$ and $\theta-A^2=(2b-1)\delta-b^2\delta^2>0$; since $A<\sqrt\theta$ one has $A/\theta<1/A$, so $C\in(A/\theta,1/A)$ and then $B\in(A,\min(1/C,C\theta))$ exist.
+\end{proof}
+
+\begin{proof}[Proof of Theorem A]
+Fix $\nu>2$ and suppose, for contradiction, that arbitrarily large $q$ admit $p$ with $|\omega-p/q|\le q^{-\nu}$. Take $\theta,A,B,C$ from Lemma~\ref{params}, then $\eta>0$ so small that $g=\nu(A(1-\eta)-\theta)-(1-\theta)>0$, put $\eps_0=\min(g/2,1/2)$, and fix $F_0>2/\theta$ with $\nu/F_0<\eps_0/3$. For an integer $m$ put
+\[
+K=\lfloor C^m\rfloor,\qquad w_0=B^{-m},\qquad v_0=2K\theta^mw_0 .
+\]
+Then $K\theta^m<1$ and $K(w_0/v_0)\theta^m=1/2$, so \eqref{2.1} holds; $K/w_0\le(CB)^m\to0$; $v_0\sim2(C\theta/B)^m\to\infty$; and $L=\eta^2(B/A)^m/(2(m+1))\to\infty$ as $m\to\infty$. Choose $m$ so large that
+\begin{equation}\label{4.8}
+\frac{\Lambda F_0m+2\log2}{v_0}+\frac{100K(1+|\log\alpha|)+(K-1)\log b}{w_0}<\frac{\eps_0}3,\qquad cL>2 ;
+\end{equation}
+this is possible because the second summand is at most $(CB)^m\bigl(100(1+|\log\alpha|)+\log b\bigr)$. Fix $m,K,w_0,v_0$, hence the $Y$-coordinates $\alpha^j$ of the centres. Choose approximations $p_i/q_i$ satisfying \eqref{3.1}, $w_i=\lceil\log q_i\rceil$, successively so large that they meet the thresholds of Theorem~\ref{interp} (which depend only on the fixed data and the earlier $w$'s) and
+\begin{equation}\label{4.9}
+\Lambda\sum_i\frac1{w_i}+\frac{\theta+\log4+\log(2K)+\nu+\log(2R_\alpha)}{w_*}<\frac{\eps_0}3 .
+\end{equation}
+Then $E'_{\mathrm{ar}}+E'_{\mathrm{an}}<\eps_0\le g/2$ and $cL>2>1+E'_{\mathrm{ar}}+E'_{\mathrm{an}}$, and Proposition~\ref{comp} gives a contradiction for large $H$. Hence $|\omega-p/q|>q^{-\nu}$ for all $q\ge Q(\nu,\alpha)$. Taking $\nu=3$ shows that $\omega$ is not rational (a rational $\omega=p/q$ would give infinitely many exact representations $p'/q'$), so $\mu(\omega)\ge2$ by Dirichlet, and $\mu(\omega)=2$.
+\end{proof}
+
+The threshold $Q(\nu,\alpha)$ is ineffective, exactly as in \cite{OAI}: the dimension $m$ and the approximations are chosen against a hypothetical sequence of exceptionally good approximations.
+
+\begin{corollary}
+For every positive rational $\alpha\ne1$ and every $\nu>2$, $\|q\log\alpha\|\ge q^{1-\nu}$ for all large $q$, where $\|\cdot\|$ is the distance to the nearest integer; equivalently $|\alpha^q-e^p|\ge\tfrac12e^pq^{1-\nu}$ for all large $q$ and all $p$.
+\end{corollary}
+
+\section{Algebraic $\alpha$, and the limits of the method}\label{sec:limits}
+
+\begin{proposition}\label{alg}
+Let $\alpha>0$ be a real algebraic number of degree $D$, $\alpha\ne1$. Then $\mu(\log\alpha)\le2D$.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+Run Sections~\ref{sec:det}--\ref{sec:proof} with centres $(\alpha^j,jr_i)$. After the column and row scalings and an extra row scaling by $d^{jh_{\max}}$, where $d$ is a denominator of $\alpha$, the matrix has entries in the ring of integers of $\Q(\alpha)$, and $\Delta'=(\text{scalings})\cdot\Delta_H$ is a nonzero algebraic integer, so $|N_{\Q(\alpha)/\Q}(\Delta')|\ge1$, i.e. $\log|\Delta_H|\ge-DS-\sum_{\sigma\ne\mathrm{id}}\log|\sigma\Delta_H|$ with $S=MH(1-\bar b)+MHE'_{\mathrm{ar}}$. The conjugate $\sigma\Delta_H$ is the determinant of the same matrix with $\alpha$ replaced by $\sigma(\alpha)$; its rows are jets of $P(\lambda^je^z,z+u+\eps+\tau)$ with $\lambda=\sigma(\alpha)/\alpha$ and $z=j\omega+\log(1+t)$, so the column $Y^hX^\alpha$ tests $\lambda^{jh}f_{a,P}(z)$: the factor $\lambda^{jh}$ depends on the row through $j$ and on the column through $h$, and rows at different centres with the same $(a,d)$ are no longer proportional. Only Hadamard's bound $\log|\sigma\Delta_H|\le MH\cdot o(1)$ is available for the conjugates. The comparison then needs $\nu(A(1-\eta)-\theta)-D(1-\theta)>0$, and with $\theta=1-\delta$, $A=1-b\delta$, $b>1/2$ this is $\nu(1-b)>D$, giving every $\nu>2D$.
+\end{proof}
+
+If $\lambda$ were a root of unity of order $n$, grouping the rows by $j\bmod n$ would restore the collision at the cost $L\to L/n$; but $\sigma(\alpha)=\zeta\alpha$ for all $\sigma$ forces $\alpha^n\in\Q$, which is the rational case.
+
+\begin{remark}[Ratios of logarithms]
+The method does not reach $\xi=\log3/\log2$ or any ratio of logarithms, for which the known bounds come from linear independence measures for $1,\log2,\log3$ (Rhin \cite{Rhin}; see Zudilin \cite{Zud} for the state of the art and the method). An approximation $p/q$ to $\xi$ is the statement $3^q/2^p=e^{\eps}$ with $|\eps|\le q^{1-\nu}\log2$. The method requires, for each approximation, an algebraic centre on the curve $z\mapsto(e^z,z+u)$ with a rational jet whose arithmetic cost matches the weights: $X$-heights $\log q_i$ against $X$-degrees of weight $w_i=\log q_i$, and $O(K)$ $Y$-heights against $Y$-degrees $h\le H/w_0$ with $w_0$ fixed. For $\log2$ the algebraic object attached to $p/q$ is $p/q$ itself, of height $\log q$, and the error $q^{-\nu}$ is exponentially small in that height. For $\xi$ the algebraic object is $3^q/2^p$, of height $\asymp q$, against the error $q^{1-\nu}$, polynomially small in the height: placing it in a centre costs $2q\log3/w_0$ per unit of $H$, unbounded, while placing the approximation in the jet (the curve $Y=2^X$, whose tangent field $Y\partial_Y+(\log2)^{-1}\partial_X$ is not defined over $\Q$) costs denominators $q^{\,s}$ in the derivative direction, whose weight $v_0$ is fixed. This is Baker's regime, not the Roth regime of the determinant. The number $e^\xi$ is transcendental by Gelfond--Schneider, so no centre of the exponential curve attached to $\xi$ is algebraic.
+\end{remark}
+
+\begin{remark}[Falsification tests]
+The argument must fail for $\alpha=1$: then $\omega=0$, $p_i=0$ for every good approximation, and the centres $(1,0)$ coincide, violating the hypothesis of Theorem~\ref{interp}; and Theorem~A is false for $\omega=0$. It must fail for a general transcendental $\omega$, since Liouville numbers exist: for such $\omega$ the point $e^{j\omega}$ is not algebraic, and Lemma~\ref{arith} has no integral matrix. For $\omega=\log\alpha$ with $\alpha$ algebraic, Baker's theorem gives $\mu(\omega)<\infty$, consistent with Proposition~\ref{alg}, and $\log\alpha$ is never a Liouville number.
+\end{remark}
+
+
+\section{Formal verification}\label{sec:formal}
+
+The directory \texttt{lean/} accompanying this paper contains a Lean~4 development over Mathlib (Lean v4.34.1, Mathlib at the commit pinned by \cite{OAI}), vendored from the formalization of \cite{OAI} and modified module by module: 863 files, 94{,}643 lines, with the original $\pi$ development kept byte-identical alongside it. The file \texttt{Main.lean} proves
+\begin{lstlisting}
+theorem log_irrationalityExponent (α : ℚ) (hα : 0 < α) (hα1 : α ≠ 1) :
+    irrationalityExponent (Real.log α) = 2
+
+theorem log_two_irrationalityExponent : irrationalityExponent (Real.log 2) = 2
+
+theorem log_not_liouvilleWith (α : ℚ) (hα : 0 < α) (hα1 : α ≠ 1) {p : ℝ} (hp : 2 < p) :
+    ¬ LiouvilleWith p (Real.log α)
+\end{lstlisting}
+together with \texttt{log\_main}, the explicit form of Theorem~A in the vocabulary of the challenge file of \cite{OAI}: for every real $\nu>2$ an integer $Q\ge2$ with $q^{-\nu}\le|\log\alpha-p/q|$ for all integers $p,q$ with $q\ge Q$, and the supremum of the set of $\nu>0$ admitting infinitely many rationals $r$ with $0<|\log\alpha-r|<\operatorname{den}(r)^{-\nu}$ equal to~$2$. Here \texttt{irrationalityExponent} is the irrationality measure as defined in \cite{OAI} (that supremum), vendored unchanged under its original name, and \texttt{LiouvilleWith} is Mathlib's.
+
+The geometric side (Theorem~\ref{interp}) is the development of \cite{OAI}, Section~2, with the base point $Y=1$ of the centres replaced by a parameter $y$ and the $j$-th centre placed at $y^j$; the arithmetic side is Lemmas~\ref{arith}--\ref{coll}, Proposition~\ref{comp} and Section~\ref{sec:proof} as written, with the row scaling $b^{jh_{\max}}$, the identity $e^{j\omega}=\alpha^j$, the radius $100K(1+|\omega|)$ and the error term $(K-1)\log b/w_0$ appearing where the text puts them. The harness \texttt{AxiomCheck.lean} checks, with \texttt{\#guard\_msgs}, that the theorems above and the intermediate lemmas depend only on \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}; there is no \texttt{sorry}, no \texttt{native\_decide} and no added axiom.
+
+\begin{thebibliography}{99}
+\bibitem{Bak} A. Baker, \emph{Transcendental Number Theory}, Cambridge University Press, 1975. \doi{10.1017/CBO9780511565977}
+\bibitem{Hata} M. Hata, Legendre type polynomials and irrationality measures, \emph{J. Reine Angew. Math.} 407 (1990), 99--125. \doi{10.1515/crll.1990.407.99}
+\bibitem{Mar} R. Marcovecchio, The Rhin--Viola method for $\log2$, \emph{Acta Arith.} 139 (2009), 147--184. \doi{10.4064/aa139-2-5}
+\bibitem{OAI} OpenAI, \emph{The irrationality exponent of $\pi$ is $2$}, September 24, 2026, \url{https://github.com/openai/math}, directory \texttt{preprints/The-irrationality-exponent-of-pi-is-2-September-24-2026}; Lean formalization \texttt{lean/ComparatorChallenges/PiExponent.lean}, theorem \texttt{OAI.PiExponent.main}.
+\bibitem{Rhin} G. Rhin, Approximants de Pad\'e et mesures effectives d'irrationalit\'e, in: \emph{S\'eminaire de Th\'eorie des Nombres, Paris 1985--86}, Progr. Math. 71, Birkh\"auser, Boston, 1987, 155--164. \href{https://zbmath.org/0632.10034}{Zbl 0632.10034}.
+\bibitem{Ruk} E. A. Rukhadze, A lower bound for the approximation of $\ln2$ by rational numbers, \emph{Vestnik Moskov. Univ. Ser. I Mat. Mekh.} 1987, no. 6, 25--29. \url{https://www.mathnet.ru/eng/vmumm3164}
+\bibitem{Zud} W. Zudilin, An essay on irrationality measures of $\pi$ and other logarithms, \emph{Chebyshevskii Sb.} 5 (2004), no. 2, 49--65. \url{https://arxiv.org/abs/math/0404523}
+\end{thebibliography}
+
+\end{document}
