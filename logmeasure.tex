@@ -8,7 +8,7 @@
 \lstdefinelanguage{Lean}{morekeywords={theorem,def,open},sensitive=true,morecomment=[l]{--}}
 \lstset{language=Lean, basicstyle=\small\fontfamily{lmtt}\selectfont\upshape, keywordstyle=\bfseries,
   columns=fullflexible, keepspaces=true, breaklines=false, xleftmargin=1em, aboveskip=6pt, belowskip=6pt,
-  literate={α}{{$\alpha$}}1 {ℚ}{{$\mathbb{Q}$}}1 {ℝ}{{$\mathbb{R}$}}1 {→}{{$\rightarrow$}}1 {≠}{{$\ne$}}1 {∀}{{$\forall$}}1 {≤}{{$\le$}}1 {¬}{{$\lnot$}}1 {ν}{{$\nu$}}1 {∃}{{$\exists$}}1 {∧}{{$\wedge$}}1 {ℤ}{{$\mathbb{Z}$}}1}
+  literate={α}{{$\alpha$}}1 {ℚ}{{$\mathbb{Q}$}}1 {ℝ}{{$\mathbb{R}$}}1 {→}{{$\rightarrow$}}1 {≠}{{$\ne$}}1 {∀}{{$\forall$}}1 {≤}{{$\le$}}1 {¬}{{$\lnot$}}1 {ν}{{$\nu$}}1 {∃}{{$\exists$}}1 {∧}{{$\wedge$}}1 {ℤ}{{$\mathbb{Z}$}}1 {^}{{\textasciicircum}}1}
 \usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
 \newcommand{\doi}[1]{\href{https://doi.org/#1}{doi:#1}}
 
@@ -246,12 +246,10 @@ theorem irrationality_measure_log (α : ℚ) (hα : 0 < α) (hα1 : α ≠ 1) :
     sSup {ν : ℝ | 0 < ν ∧ Set.Infinite {r : ℚ | 2 ≤ r.den ∧
         0 < |Real.log α - (r : ℝ)| ∧ |Real.log α - (r : ℝ)| < (r.den : ℝ) ^ (-ν)}} = 2
 
-theorem irrationality_measure_log_two : (the same statement for Real.log 2)
-
 theorem log_not_liouvilleWith (α : ℚ) (hα : 0 < α) (hα1 : α ≠ 1) {p : ℝ} (hp : 2 < p) :
     ¬ LiouvilleWith p (Real.log α)
 \end{lstlisting}
-The first is Theorem~A in the vocabulary of the challenge file of \cite{OAI}: for every real $\nu>2$ an integer $Q\ge2$ with $q^{-\nu}\le|\log\alpha-p/q|$ for all integers $p,q$ with $q\ge Q$, and the supremum of the set of $\nu>0$ admitting infinitely many rationals $r$ with $0<|\log\alpha-r|<\operatorname{den}(r)^{-\nu}$ equal to~$2$. That supremum is \texttt{irrationalityExponent} in \cite{OAI}, whose definition is copied unchanged; \texttt{LiouvilleWith} is Mathlib's.
+The first is Theorem~A in the vocabulary of the challenge file of \cite{OAI}: for every real $\nu>2$ an integer $Q\ge2$ with $q^{-\nu}\le|\log\alpha-p/q|$ for all integers $p,q$ with $q\ge Q$, and the supremum of the set of $\nu>0$ admitting infinitely many rationals $r$ with $0<|\log\alpha-r|<\operatorname{den}(r)^{-\nu}$ equal to~$2$. That supremum is \texttt{irrationalityExponent} in \cite{OAI}, whose definition is copied unchanged; \texttt{LiouvilleWith} is Mathlib's. The same module states the case $\alpha=2$ as \texttt{irrationality\_measure\_log\_two}.
 
 The proof, under \texttt{LogIrrationalityMeasure/}, is the formalization of \cite{OAI} modified module by module: 863 files, 94{,}643 lines. The geometric side (Theorem~\ref{interp}) is the development of \cite{OAI}, Section~2, with the base point $Y=1$ of the centres replaced by a parameter $y$ and the $j$-th centre placed at $y^j$; the arithmetic side is Lemmas~\ref{arith}--\ref{coll}, Proposition~\ref{comp} and Section~\ref{sec:proof} as written, with the row scaling $b^{jh_{\max}}$, the identity $e^{j\omega}=\alpha^j$, the radius $100K(1+|\omega|)$ and the error term $(K-1)\log b/w_0$ where the text puts them. Every theorem above depends only on the axioms \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}, as \texttt{AxiomCheck.lean} verifies.
 
@@ -259,7 +257,7 @@ The proof, under \texttt{LogIrrationalityMeasure/}, is the formalization of \cit
 \bibitem{Bak} A. Baker, \emph{Transcendental Number Theory}, Cambridge University Press, 1975. \doi{10.1017/CBO9780511565977}
 \bibitem{Hata} M. Hata, Legendre type polynomials and irrationality measures, \emph{J. Reine Angew. Math.} 407 (1990), 99--125. \doi{10.1515/crll.1990.407.99}
 \bibitem{Mar} R. Marcovecchio, The Rhin--Viola method for $\log2$, \emph{Acta Arith.} 139 (2009), 147--184. \doi{10.4064/aa139-2-5}
-\bibitem{OAI} OpenAI, \emph{The irrationality exponent of $\pi$ is $2$}, September 24, 2026, \url{https://github.com/openai/math}, directory \texttt{preprints/The-irrationality-exponent-of-pi-is-2-September-24-2026}; Lean formalization \texttt{lean/ComparatorChallenges/PiExponent.lean}, theorem \texttt{OAI.PiExponent.main}.
+\bibitem{OAI} OpenAI, \emph{The irrationality exponent of $\pi$ is $2$}, September 24, 2026. \url{https://github.com/openai/math/tree/main/preprints/The-irrationality-exponent-of-pi-is-2-September-24-2026}. Lean formalization: theorem \texttt{OAI.PiExponent.main} in \url{https://github.com/openai/math/blob/main/lean/ComparatorChallenges/PiExponent.lean}.
 \bibitem{Rhin} G. Rhin, Approximants de Pad\'e et mesures effectives d'irrationalit\'e, in: \emph{S\'eminaire de Th\'eorie des Nombres, Paris 1985--86}, Progr. Math. 71, Birkh\"auser, Boston, 1987, 155--164. \href{https://zbmath.org/0632.10034}{Zbl 0632.10034}.
 \bibitem{Ruk} E. A. Rukhadze, A lower bound for the approximation of $\ln2$ by rational numbers, \emph{Vestnik Moskov. Univ. Ser. I Mat. Mekh.} 1987, no. 6, 25--29. \url{https://www.mathnet.ru/eng/vmumm3164}
 \bibitem{Zud} W. Zudilin, An essay on irrationality measures of $\pi$ and other logarithms, \emph{Chebyshevskii Sb.} 5 (2004), no. 2, 49--65. \url{https://arxiv.org/abs/math/0404523}
